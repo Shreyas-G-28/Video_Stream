@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^cd /tmp && python3 - <<'EOF'\nt=open\\('/tmp/pasted\\.txt'\\)\\.read\\(\\)\ni=t\\.index\\('export const SUGGESTIONS_DATA'\\)\nj=t\\.index\\('\\\\n',i\\)\nbody=t\\[:j\\]\\.rstrip\\(\\)\nassert body\\.endswith\\('\\]'\\)\nbody=body\\.replace\\('export const YOUTUBE_DATA = \\{','export const YOUTUBE_DATA: YouTubeListResponse = \\{',1\\)\nbody=body\\[:body\\.index\\('export const SUGGESTIONS_DATA'\\)\\]\\+body\\[body\\.index\\('export const SUGGESTIONS_DATA'\\):\\]\\+' as const;'\nsrc=\"import type \\{ YouTubeListResponse \\} from '\\.\\./types';\\\\n\\\\n\"\\+body\\+\"\\\\n\"\nopen\\('/Users/shreyas\\.acharya/youtube-clone/app/data/mockData\\.ts','w'\\)\\.write\\(src\\)\nprint\\(len\\(src\\)\\)\nEOF\ntail -c 400 /Users/shreyas\\.acharya/youtube-clone/app/data/mockData\\.ts; grep -c '\"kind\": \"youtube#video\"' /Users/shreyas\\.acharya/youtube-clone/app/data/mockData\\.ts$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
