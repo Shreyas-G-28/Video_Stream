@@ -1,8 +1,5 @@
 import { YouTubeVideo } from '../types';
 
-const API_KEY = "AIzaSyATkRHzpzvaM1xc8jCOsD-ar3yvKyqngE0";
-const BASE_URL = "https://youtube.googleapis.com/youtube/v3";
-
 export interface PopularVideosResponse {
   items: YouTubeVideo[];
   nextPageToken?: string;
@@ -12,8 +9,11 @@ export const fetchPopularVideos = async (pageToken?: string): Promise<PopularVid
   try {
     const pageParam = pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : '';
     const res = await fetch(
-      `${BASE_URL}/videos?part=snippet,contentDetails,statistics&chart=mostPopular&regionCode=IN&maxResults=24${pageParam}&key=${API_KEY}`
+      `/api/youtube?endpoint=videos&part=snippet,contentDetails,statistics&chart=mostPopular&regionCode=IN&maxResults=24${pageParam}`
     );
+    if (!res.ok) {
+      return { items: [] };
+    }
     const data = await res.json();
     return {
       items: data.items || [],
@@ -31,8 +31,11 @@ export const searchYouTubeVideos = async (query: string) => {
   }
   try {
     const searchRes = await fetch(
-      `${BASE_URL}/search?part=snippet&maxResults=24&q=${encodeURIComponent(query)}&type=video&key=${API_KEY}`
+      `/api/youtube?endpoint=search&part=snippet&maxResults=24&q=${encodeURIComponent(query)}&type=video`
     );
+    if (!searchRes.ok) {
+      return [];
+    }
     const searchData = await searchRes.json();
     const items = searchData.items || [];
     const videoIds = items
@@ -45,8 +48,11 @@ export const searchYouTubeVideos = async (query: string) => {
     }
 
     const videosRes = await fetch(
-      `${BASE_URL}/videos?part=snippet,contentDetails,statistics&id=${videoIds}&key=${API_KEY}`
+      `/api/youtube?endpoint=videos&part=snippet,contentDetails,statistics&id=${videoIds}`
     );
+    if (!videosRes.ok) {
+      return [];
+    }
     const videosData = await videosRes.json();
     return videosData.items || [];
   } catch (error) {
@@ -57,7 +63,10 @@ export const searchYouTubeVideos = async (query: string) => {
 
 export const fetchVideoComments = async (videoId: string) => {
   try {
-    const res = await fetch(`${BASE_URL}/commentThreads?part=snippet,replies&videoId=${videoId}&maxResults=30&key=${API_KEY}`);
+    const res = await fetch(`/api/youtube?endpoint=commentThreads&part=snippet,replies&videoId=${videoId}&maxResults=30`);
+    if (!res.ok) {
+      return [];
+    }
     const data = await res.json();
     return data.items || [];
   } catch (error) {

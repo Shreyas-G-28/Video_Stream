@@ -10,6 +10,7 @@ describe('api utilities', () => {
     it('returns items and nextPageToken from YouTube response', async () => {
       const mockItems = [{ id: 'vid1' }, { id: 'vid2' }];
       vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+        ok: true,
         json: async () => ({ items: mockItems, nextPageToken: 'token123' }),
       } as Response);
 
@@ -42,9 +43,11 @@ describe('api utilities', () => {
 
       vi.spyOn(globalThis, 'fetch')
         .mockResolvedValueOnce({
+          ok: true,
           json: async () => searchResponse,
         } as Response)
         .mockResolvedValueOnce({
+          ok: true,
           json: async () => videosResponse,
         } as Response);
 
@@ -54,6 +57,7 @@ describe('api utilities', () => {
 
     it('returns empty array if search result has no videos', async () => {
       vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+        ok: true,
         json: async () => ({ items: [] }),
       } as Response);
 
@@ -66,6 +70,7 @@ describe('api utilities', () => {
     it('fetches comments for a video', async () => {
       const comments = [{ id: 'c1' }, { id: 'c2' }];
       vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+        ok: true,
         json: async () => ({ items: comments }),
       } as Response);
 
